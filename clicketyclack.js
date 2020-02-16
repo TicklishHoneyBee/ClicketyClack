@@ -1,5 +1,6 @@
 
 function onLoad() {
+	alert("ClicketyClack is in VERY early development;\nThere's not much here,\nnot all the research does anything yet,\nand your game IS NOT SAVED anywhere, at all.\nYou have been warned.");
 	tickLib.init({steptime:10,calctime:1,displayonstep:true});
 	resource.add('bank','Bank','$',0,0,true,[]);
 	resource.add('track','Track','',0,0,false,[]);
