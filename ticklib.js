@@ -440,6 +440,24 @@ var asset = {
 								txt += "\nGives:"+ct;
 							}
 							ii.innerHTML = txt;
+							ct = '';
+							for (var l=0; l<asset.items[i].sectake.length; l++) {
+								var rt = '';
+								var r = resource.getItem(asset.items[i].sectake[l].resource);
+								if (r == null)
+									continue;
+								rt += "\n ";
+								rt += r.title+': ';
+								if (asset.items[i].sectake[l].count > 0.0) {
+									rt += asset.items[i].sectake[l].count.toFixed(2)+'/s ';
+								}
+
+								ct += rt;
+							}
+							if (ct != '') {
+								txt += "\nTakes:"+ct;
+							}
+							ii.innerHTML = txt;
 						}else{
 							tickLog.debug('no asset info display');
 						}

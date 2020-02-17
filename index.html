@@ -13,9 +13,11 @@ div.content {position:absolute; left:0px; right:0px; top:35px; bottom:25px;}
 div.footer {width:100%; height:25px; line-height:25px; background-color:grey; color:white; font-size:14px;position:absolute; bottom:0px; text-align:right;}
 div.footer a {margin:0 20px; font-weight:bold; color:white;}
 
-div.info {width:290px; height:100px; position:absolute; left:10px; top:0px; white-space:pre-wrap;}
+div.leftbar {width:290px; position:absolute; left:10px; top:0px;}
 
-div.resource {width:290px; position:absolute; left:10px; top:100px;}
+div.info {width:290px; min-height:100px; white-space:pre-wrap;}
+
+div.resource {width:290px; min-height:100px;}
 div.resource div {width:290px; float:none; display:block; height:20px; line-height:20px;}
 div.resource div span {display:block; float:left;}
 div.resource div span.resourcename {width:150px; text-align:right;}
@@ -41,8 +43,10 @@ div.log p {margin:0; padding:0; border:0; font-size:12px;}
 <body>
 	<div class="header">Clickety Clack</div>
 	<div class="content">
-		<div class="info" id="info"></div>
-		<div class="resource" id="resource"></div>
+		<div class="leftbar">
+			<div class="info" id="info"></div>
+			<div class="resource" id="resource"></div>
+		</div>
 		<div class="tablist" id="tablist"></div>
 		<div class="action" id="action"></div>
 		<div class="log" id="logbox"></div>
