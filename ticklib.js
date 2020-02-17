@@ -300,11 +300,13 @@ var asset = {
 				continue;
 			if (asset.items[i].once && asset.items[i].count)
 				continue;
+			tickLog.core('checking "'+asset.items[i].name+'"');
 			if (asset.rec(asset.items[i])) {
 				tickLog.debug('enabling "'+asset.items[i].name+'"');
 				asset.items[i].enabled = true;
 				asset.updateDisplay = true;
 			}
+			tickLog.core('checked "'+asset.items[i].name+'"');
 		}
 	},
 	recalc:function() {
@@ -554,12 +556,15 @@ var asset = {
 	rec:function(item) {
 		for (var i=0; i<item.rec.length; i++) {
 			if (item.rec[i].cat == 'resource') {
+				tickLog.core('check rec resource "'+item.rec[i].name+'",'+item.rec[i].count);
 				if (!resource.test(item.rec[i].name,item.rec[i].count))
 					return false;
 			}else if (item.rec[i].cat == 'asset') {
+				tickLog.core('check rec asset "'+item.rec[i].name+'","'+item.rec[i].type+'",'+item.rec[i].count);
 				if (!asset.test(item.rec[i].name,item.rec[i].type,item.rec[i].count))
 					return false;
 			}else{
+				tickLog.core('check rec null "'+item.rec[i].name+'","'+item.rec[i].cat+'"');
 				return false;
 			}
 		}
@@ -689,6 +694,10 @@ var tickLib = {
 				break;
 			case 'displayonstep':
 				resource.displayonstep = true;
+				break;
+			case 'grant':
+				if (window.location.protocol == 'file:')
+					resource.increment('bank',parseInt(v[1]));
 				break;
 			}
 		}

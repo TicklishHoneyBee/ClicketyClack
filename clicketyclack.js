@@ -59,7 +59,7 @@ function onLoad() {
 
 	asset.addType('mecheng','Mechanical Engineering','research');
 	asset.add('r-vans','Vans','Covered wagons that carry more freight.',0,'mecheng',true,true,false,[{resource:'bank',count:30,inc:0}],[],[],[{cat:'resource',name:'track',count:20},{cat:'asset',name:'wagon-1',type:'rollingstock',count:20},{cat:'asset',name:'r-mecheng',type:'research',count:1}]);
-	asset.add('r-animal','Animal Vans','Covered wagons that carry animals.',0,'mecheng',true,true,false,[{resource:'bank',count:30,inc:0}],[],[],[{cat:'resource',name:'track',count:60},{cat:'asset',name:'wagon-2',type:'rollingstock',count:5},{cat:'asset',name:'r-mecheng',type:'research',count:1},{cat:'asset',name:'r-ballast',type:'research',count:1}]);
+	asset.add('r-animal','Animal Vans','Covered wagons that carry animals.',0,'mecheng',true,true,false,[{resource:'bank',count:30,inc:0}],[],[],[{cat:'resource',name:'track',count:60},{cat:'asset',name:'wagon-2',type:'rollingstock',count:5},{cat:'asset',name:'r-mecheng',type:'research',count:1},{cat:'asset',name:'r-ballast',type:'trackwork',count:1}]);
 
 	tickControl.start();
 }
