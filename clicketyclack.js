@@ -27,18 +27,19 @@ function onLoad() {
 	asset.addType('earthwork','Earthwork','railway');
 	asset.add('cutting','Cutting',"Level track means faster trains.",0,'earthwork',false,true,false,[{resource:'bank',count:5,inc:5}],[],[{resource:'bank',count:0,inc:2}],[{cat:'asset',name:'r-cutting',type:'civileng',count:1}]);
 	asset.add('embankment','Embankment',"Level track means faster trains.",0,'earthwork',false,true,false,[{resource:'bank',count:5,inc:5}],[],[{resource:'bank',count:0,inc:2}],[{cat:'asset',name:'r-embankment',type:'civileng',count:1}]);
-	asset.add('tunnel','Tunnel',"Tunnel through mountains to get there faster.",0,'earthwork',false,true,false,[{resource:'bank',count:10,inc:5}],[{resource:'bank',count:0.01,inc:0}],[{resource:'bank',count:0,inc:5}],[{cat:'asset',name:'r-tunnel',type:'civileng',count:1}]);
+	asset.add('tunnel','Tunnel',"Tunnel through mountains to get there faster.",0,'earthwork',false,true,false,[{resource:'bank',count:10,inc:5}],[{resource:'bank',count:0.01,inc:0}],[{resource:'bank',count:0,inc:7}],[{cat:'asset',name:'r-tunnel',type:'civileng',count:1}]);
 
 	asset.addType('rollingstock','Rollingstock','railway');
 	asset.add('wagon-1','Open Wagon',"A basic wagon for moving freight.",0,'rollingstock',false,true,false,[{resource:'bank',count:3,inc:5}],[],[{resource:'bank',count:0.01,inc:0}],[{cat:'resource',name:'track',count:5}]);
 	asset.add('wagon-2','Van','A covered wagon that carries more freight.',0,'rollingstock',false,true,false,[{resource:'bank',count:5,inc:5}],[],[{resource:'bank',count:0.02,inc:0}],[{cat:'asset',name:'r-vans',type:'mecheng',count:1}]);
+	asset.add('wagon-3','Sheep Wagon','A covered wagon that carries sheep.',0,'rollingstock',false,true,false,[{resource:'bank',count:5,inc:5}],[],[{resource:'bank',count:0.03,inc:0}],[{cat:'asset',name:'platform',type:'structures',count:2},{cat:'asset',name:'r-ballast',type:'trackwork',count:1}]);
 
 	asset.addType('locos','Locomotives','railway');
-	asset.add('loco-1','Saddle Tank',"A small steam loco for pulling wagons",0,'locos',false,true,false,[{resource:'bank',count:20,inc:5}],[{resource:'bank',count:0.05,inc:0}],[{resource:'bank',count:0,inc:10}],[{cat:'asset',name:'r-iron',type:'trackwork',count:1}])
+	asset.add('loco-1','Saddle Tank',"A small steam loco for pulling wagons",0,'locos',false,true,false,[{resource:'bank',count:20,inc:5}],[{resource:'bank',count:0.03,inc:0}],[{resource:'bank',count:0,inc:15}],[{cat:'asset',name:'r-iron',type:'trackwork',count:1}])
 
 	asset.addType('structures','Structures','railway');
 	asset.add('platform','Platform',"Makes loading and unloading of rollingstock quicker and easier.",0,'structures',false,true,false,[{resource:'bank',count:5,inc:5}],[],[{resource:'bank',count:0,inc:2}],[{cat:'asset',name:'r-civileng',type:'research',count:1}]);
-	asset.add('bridge','Bridge',"Cross over rivers and valleys to get there faster.",0,'structures',false,true,false,[{resource:'bank',count:10,inc:5}],[{resource:'bank',count:0.01,inc:0}],[{resource:'bank',count:0,inc:5}],[{cat:'asset',name:'r-bridge',type:'civileng',count:1}]);
+	asset.add('bridge','Bridge',"Cross over rivers and valleys to get there faster.",0,'structures',false,true,false,[{resource:'bank',count:10,inc:5}],[{resource:'bank',count:0.01,inc:0}],[{resource:'bank',count:0,inc:7}],[{cat:'asset',name:'r-bridge',type:'civileng',count:1}]);
 
 // RESEARCH
 
@@ -48,13 +49,13 @@ function onLoad() {
 
 	asset.addType('trackwork','Trackwork','research');
 	asset.add('r-iron','Iron Rails',"Strong rails that can support a locomotive.",0,'trackwork',true,true,false,[{resource:'bank',count:20,inc:0}],[],[],[{cat:'resource',name:'track',count:20},{cat:'asset',name:'wagon-1',type:'rollingstock',count:10},{cat:'asset',name:'r-civileng',type:'research',count:1}]);
-	asset.add('r-ballast','Ballast',"Gives a smoother ride suitable for passengers",0,'trackwork',true,true,false,[{resource:'bank',count:100,inc:0}],[],[],[{cat:'resource',name:'track',count:50},{cat:'asset',name:'wagon-1',type:'rollingstock',count:10},{cat:'asset',name:'r-iron',type:'trackwork',count:1}]);
+	asset.add('r-ballast','Ballast',"Gives a smoother ride suitable for passengers and animals.",0,'trackwork',true,true,false,[{resource:'bank',count:100,inc:0}],[],[],[{cat:'resource',name:'track',count:50},{cat:'asset',name:'wagon-1',type:'rollingstock',count:10},{cat:'asset',name:'r-iron',type:'trackwork',count:1}]);
 
 	asset.addType('civileng','Civil Engineering','research');
-	asset.add('r-cutting','Cuttings',"Why go round a hill when you can go through it?",0,'civileng',true,true,false,[{resource:'bank',count:20,inc:0}],[],[],[{cat:'resource',name:'track',count:20},{cat:'asset',name:'r-civileng',type:'research',count:1}]);
-	asset.add('r-tunnel','Tunnels',"Go through mountains too!",0,'civileng',true,true,false,[{resource:'bank',count:20,inc:0}],[],[],[{cat:'asset',name:'cutting',type:'earthwork',count:1}]);
-	asset.add('r-embankment','Embankments',"Lift the tracks clear of low ground.",0,'civileng',true,true,false,[{resource:'bank',count:20,inc:0}],[],[],[{cat:'resource',name:'track',count:20},{cat:'asset',name:'r-cutting',type:'civileng',count:1}]);
-	asset.add('r-bridge','Bridges',"Lay track over rivers and deep valleys.",0,'civileng',true,true,false,[{resource:'bank',count:20,inc:0}],[],[],[{cat:'resource',name:'track',count:20},{cat:'asset',name:'embankment',type:'earthwork',count:1}]);
+	asset.add('r-cutting','Cuttings',"Why go round a hill when you can go through it?",0,'civileng',true,true,false,[{resource:'bank',count:20,inc:0}],[],[],[{cat:'resource',name:'track',count:30},{cat:'asset',name:'r-civileng',type:'research',count:1}]);
+	asset.add('r-tunnel','Tunnels',"Go through mountains too!",0,'civileng',true,true,false,[{resource:'bank',count:20,inc:0}],[],[],[{cat:'resource',name:'track',count:40},{cat:'asset',name:'cutting',type:'earthwork',count:1}]);
+	asset.add('r-embankment','Embankments',"Lift the tracks clear of low ground.",0,'civileng',true,true,false,[{resource:'bank',count:20,inc:0}],[],[],[{cat:'resource',name:'track',count:30},{cat:'asset',name:'r-cutting',type:'civileng',count:1}]);
+	asset.add('r-bridge','Bridges',"Lay track over rivers and deep valleys.",0,'civileng',true,true,false,[{resource:'bank',count:20,inc:0}],[],[],[{cat:'resource',name:'track',count:40},{cat:'asset',name:'embankment',type:'earthwork',count:1}]);
 
 	asset.addType('mecheng','Mechanical Engineering','research');
 	asset.add('r-vans','Vans','Covered wagons that carry more freight.',0,'mecheng',true,true,false,[{resource:'bank',count:30,inc:0}],[],[],[{cat:'resource',name:'track',count:20},{cat:'asset',name:'wagon-1',type:'rollingstock',count:20},{cat:'asset',name:'r-mecheng',type:'research',count:1}]);
