@@ -1,7 +1,7 @@
 
 function onLoad() {
 	//asset.add(name,title,description,count,type,once,inc,enabled,cost,sectake,secgive,requires)
-	alert("ClicketyClack is in VERY early development;\nThere's not much here,\nnot all the research does anything yet,\nand your game IS NOT SAVED anywhere, at all.\nYou have been warned.");
+	alert("ClicketyClack is in VERY early development;\nThere's not much here,\nthere are bugs,\nbalance is a bit off in places,\nand your game IS NOT SAVED anywhere, at all.\nYou have been warned.");
 	tickLib.init({steptime:10,calctime:1,displayonstep:true});
 
 // RESOURCES
@@ -17,7 +17,7 @@ function onLoad() {
 
 	asset.addType('prerail','Getting Started','railway');
 	asset.add('piggyback','Give Piggy Back Ride',"Gotta start somewhere.\n +$0.10",0,'prerail',false,{resource:'bank',count:0.1,inc:0},true,[],[],[],[]);
-	asset.add('push','Push Wagon',"Goes faster with a push.\n +$0.25",0,'prerail',false,{resource:'bank',count:0.25,inc:0},false,[],[],[],[{cat:'asset',name:'wagon-1',type:'rollingstock',count:1}]);
+	asset.add('push','Push Wagon',"Goes faster with a push.\n +$0.20",0,'prerail',false,{resource:'bank',count:0.2,inc:0},false,[],[],[],[{cat:'asset',name:'wagon-1',type:'rollingstock',count:1}]);
 
 // ASSETS
 
@@ -32,7 +32,7 @@ function onLoad() {
 	asset.addType('rollingstock','Rollingstock','railway');
 	asset.add('wagon-1','Open Wagon',"A basic wagon for moving freight.",0,'rollingstock',false,true,false,[{resource:'bank',count:3,inc:10}],[],[{resource:'bank',count:0.01,inc:0}],[{cat:'resource',name:'track',count:5}]);
 	asset.add('wagon-2','Van','A covered wagon that carries more freight.',0,'rollingstock',false,true,false,[{resource:'bank',count:5,inc:10}],[],[{resource:'bank',count:0.02,inc:0}],[{cat:'asset',name:'r-vans',type:'mecheng',count:1}]);
-	asset.add('wagon-3','Sheep Wagon','A covered wagon that carries sheep.',0,'rollingstock',false,true,false,[{resource:'bank',count:5,inc:10}],[],[{resource:'bank',count:0.03,inc:0}],[{cat:'asset',name:'platform',type:'structures',count:2},{cat:'asset',name:'r-ballast',type:'trackwork',count:1}]);
+	asset.add('wagon-3','Sheep Wagon','A covered wagon that carries sheep.',0,'rollingstock',false,true,false,[{resource:'bank',count:5,inc:10}],[],[{resource:'bank',count:0.03,inc:0}],[{cat:'asset',name:'platform',type:'structures',count:2},{cat:'asset',name:'r-animal',type:'mecheng',count:1}]);
 
 	asset.addType('locos','Locomotives','railway');
 	asset.add('loco-1','Saddle Tank',"A small steam loco for pulling wagons",0,'locos',false,true,false,[{resource:'bank',count:20,inc:5}],[{resource:'bank',count:0.03,inc:0}],[{resource:'bank',count:0,inc:15}],[{cat:'asset',name:'r-iron',type:'trackwork',count:1}])
@@ -49,7 +49,7 @@ function onLoad() {
 
 	asset.addType('trackwork','Trackwork','research');
 	asset.add('r-iron','Iron Rails',"Strong rails that can support a locomotive.",0,'trackwork',true,true,false,[{resource:'bank',count:20,inc:0}],[],[],[{cat:'resource',name:'track',count:20},{cat:'asset',name:'wagon-1',type:'rollingstock',count:10},{cat:'asset',name:'r-civileng',type:'research',count:1}]);
-	asset.add('r-ballast','Ballast',"Gives a smoother ride suitable for passengers and animals.",0,'trackwork',true,true,false,[{resource:'bank',count:100,inc:0}],[],[],[{cat:'resource',name:'track',count:50},{cat:'asset',name:'wagon-1',type:'rollingstock',count:10},{cat:'asset',name:'r-iron',type:'trackwork',count:1}]);
+	asset.add('r-ballast','Ballast',"Gives a smoother ride suitable for passengers and animals.",0,'trackwork',true,true,false,[{resource:'bank',count:50,inc:0}],[],[],[{cat:'resource',name:'track',count:50},{cat:'asset',name:'wagon-1',type:'rollingstock',count:10},{cat:'asset',name:'r-iron',type:'trackwork',count:1}]);
 
 	asset.addType('civileng','Civil Engineering','research');
 	asset.add('r-cutting','Cuttings',"Why go round a hill when you can go through it?",0,'civileng',true,true,false,[{resource:'bank',count:20,inc:0}],[],[],[{cat:'resource',name:'track',count:30},{cat:'asset',name:'r-civileng',type:'research',count:1}]);
@@ -59,6 +59,7 @@ function onLoad() {
 
 	asset.addType('mecheng','Mechanical Engineering','research');
 	asset.add('r-vans','Vans','Covered wagons that carry more freight.',0,'mecheng',true,true,false,[{resource:'bank',count:30,inc:0}],[],[],[{cat:'resource',name:'track',count:20},{cat:'asset',name:'wagon-1',type:'rollingstock',count:20},{cat:'asset',name:'r-mecheng',type:'research',count:1}]);
+	asset.add('r-animal','Animal Vans','Covered wagons that carry animals.',0,'mecheng',true,true,false,[{resource:'bank',count:30,inc:0}],[],[],[{cat:'resource',name:'track',count:60},{cat:'asset',name:'wagon-2',type:'rollingstock',count:5},{cat:'asset',name:'r-mecheng',type:'research',count:1},{cat:'asset',name:'r-ballast',type:'research',count:1}]);
 
 	tickControl.start();
 }
