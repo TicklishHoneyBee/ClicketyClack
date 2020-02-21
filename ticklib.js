@@ -69,6 +69,7 @@ var tickControl = {
 			}
 
 			asset.update();
+			events.update();
 			resource.update();
 
 			var tickEnd = Date.now();
@@ -82,6 +83,7 @@ var tickControl = {
 			resource.reset();
 			asset.recalc();
 			asset.display();
+			events.recalc();
 			resource.recalc();
 			resource.display();
 		}
@@ -305,8 +307,14 @@ var asset = {
 				tickLog.debug('enabling "'+asset.items[i].name+'"');
 				asset.items[i].enabled = true;
 				asset.updateDisplay = true;
+				var it = asset.getType(asset.items[i].type);
+				if (it == null)
+					continue;
+				var tt = asset.getTab(it.tab);
+				if (it == null)
+					continue;
+				tickLog.addLog('New '+it.title+' item available under '+tt.title);
 			}
-			tickLog.core('checked "'+asset.items[i].name+'"');
 		}
 	},
 	recalc:function() {
@@ -515,9 +523,25 @@ var asset = {
 		asset.tabs.push({name:name,title:title});
 		tickLog.debug('added, asset tabs: '+asset.tabs.length);
 	},
-	enable:function(name) {
+	enable:function(name,type) {
+		for (var i=0; i<asset.items.length; i++) {
+			if (asset.items[i].name == name && asset.items[i].type == type) {
+				asset.items[i].enabled = true;
+				tickLog.debug('asset "'+name+'" enabled');
+				return;
+			}
+		}
+		tickLog.debug('unknown asset "'+name+'","'+type+'"');
 	},
-	disable:function(name) {
+	disable:function(name,type) {
+		for (var i=0; i<asset.items.length; i++) {
+			if (asset.items[i].name == name && asset.items[i].type == type) {
+				asset.items[i].enabled = false;
+				tickLog.debug('asset "'+name+'" disabled');
+				return;
+			}
+		}
+		tickLog.debug('unknown asset "'+name+'","'+type+'"');
 	},
 	activateTab:function(name) {
 		for (var i=0; i<asset.tabs.length; i++) {
@@ -594,6 +618,48 @@ var asset = {
 		}
 		return null;
 	},
+	getType:function(name) {
+		for (var i=0; i<asset.types.length; i++) {
+			if (asset.types[i].name == name) {
+				return asset.types[i];
+				break;
+			}
+		}
+		return null;
+	},
+	getTab:function(name) {
+		for (var i=0; i<asset.tabs.length; i++) {
+			if (asset.tabs[i].name == name) {
+				return asset.tabs[i];
+				break;
+			}
+		}
+		return null;
+	},
+	increment:function(name,type,inc) {
+		for (var i=0; i<asset.items.length; i++) {
+			if (asset.items[i].name == name && asset.items[i].type == type) {
+				asset.items[i].enabled = true;
+				asset.items[i].count += inc;
+				asset.updateDisplay = true;
+				break;
+			}
+		}
+	},
+	decrement:function(name,type,dec) {
+		for (var i=0; i<asset.items.length; i++) {
+			if (asset.items[i].name == name && asset.items[i].type == type) {
+				asset.items[i].enabled = true;
+				if (asset.items[i].count < dec)
+					return false;
+				asset.items[i].count -= dec;
+				asset.updateDisplay = true;
+				return true;
+				break;
+			}
+		}
+		return false;
+	},
 	click:function(e) {
 		for (var i=0; i<asset.items.length; i++) {
 			if (asset.items[i].name == e.target.value) {
@@ -644,6 +710,69 @@ var asset = {
 			}
 		}
 		tickLog.debug('unknown tab "'+e.target.data+'"');
+	}
+};
+
+var events = {
+	boosts:[],	// {name:'item name string',resource:'string',base:number,boost:number,timer:float}
+	items:[],	// {name:'string',title:'string',chance:number or function,activate:function}
+	update:function() {
+		for (var i=0; i<events.boosts.length; i++) {
+			events.boosts[i].timer -= tickControl.length.step;
+		}
+	},
+	recalc:function() {
+		var boosts = [];
+		for (var i=0; i<events.boosts.length; i++) {
+			if (events.boosts[i].timer > 0.0) {
+				boosts.push(events.boosts[i]);
+				resource.addBase(events.boosts[i].resource,events.boosts[i].base);
+				resource.addBoost(events.boosts[i].resource,events.boosts[i].boost);
+			}
+		}
+		events.boosts = boosts;
+		var r = Math.floor(Math.random()*10000.0);
+		for (var i=0; i<events.items.length; i++) {
+			var act = false;
+			if (typeof events.items[i].chance == 'number') {
+				act = !(r%events.items[i].chance);
+			}else{
+				act = events.items[i].chance(r);
+			}
+			if (act) {
+				tickLog.debug('activating event "'+events.items[i].name+'"');
+				events.items[i].activate();
+				tickLog.debug('activated event "'+events.items[i].name+'"');
+			}
+		}
+	},
+	add:function(name,title,chance,activate) {
+		for (var i=0; i<events.items.length; i++) {
+			if (events.items[i].name == name) {
+				tickLog.debug('event "'+name+'" already exists');
+				return;
+			}
+		}
+		events.items.push({name:name,title:title,chance:chance,activate:activate});
+		tickLog.debug('added, events: '+events.items.length);
+	},
+	addBoost:function(name,life,resource,base,boost) {
+		events.boosts.push({name:name,resource:resource,base:base,boost:boost,timer:life});
+	},
+	getBoost:function(name) {
+		for (var i=0; i<events.boosts.length; i++) {
+			if (events.boosts[i].name == name)
+				return events.boosts[i];
+		}
+		return null;
+	},
+	getBoostCount:function(name) {
+		var c = 0;
+		for (var i=0; i<events.boosts.length; i++) {
+			if (events.boosts[i].name == name)
+				c++;
+		}
+		return c;
 	}
 };
 
@@ -701,5 +830,10 @@ var tickLib = {
 				break;
 			}
 		}
+	},
+	randRange:function(min,max) {
+		if (min >= max)
+			return min;
+		return min+Math.floor(Math.random()*Math.floor(max-min));
 	}
 };

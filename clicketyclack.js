@@ -8,6 +8,10 @@ function onLoad() {
 
 	resource.add('bank','Bank','$',0,0,true,[]);
 	resource.add('track','Track','',0,0,false,[]);
+	resource.add('goods',"Freight Carried",'',0,0,false,[{cat:'asset',name:'wagon-1',type:'rollingstock',count:1}]);
+	resource.add('pass',"Passengers Carried",'',0,0,false,[{cat:'asset',name:'coach-1',type:'rollingstock',count:1}]);
+
+// ASSETS
 
 	asset.addTab('railway','Railway');
 	asset.addTab('research','Research');
@@ -30,9 +34,9 @@ function onLoad() {
 	asset.add('tunnel','Tunnel',"Tunnel through mountains to get there faster.",0,'earthwork',false,true,false,[{resource:'bank',count:10,inc:10}],[{resource:'bank',count:0.01,inc:0}],[{resource:'bank',count:0,inc:7}],[{cat:'asset',name:'r-tunnel',type:'civileng',count:1}]);
 
 	asset.addType('rollingstock','Rollingstock','railway');
-	asset.add('wagon-1','Open Wagon',"A basic wagon for moving freight.",0,'rollingstock',false,true,false,[{resource:'bank',count:3,inc:10}],[],[{resource:'bank',count:0.01,inc:0}],[{cat:'resource',name:'track',count:5}]);
-	asset.add('wagon-2','Van','A covered wagon that carries more freight.',0,'rollingstock',false,true,false,[{resource:'bank',count:5,inc:10}],[],[{resource:'bank',count:0.02,inc:0}],[{cat:'asset',name:'r-vans',type:'mecheng',count:1}]);
-	asset.add('wagon-3','Sheep Wagon','A covered wagon that carries sheep.',0,'rollingstock',false,true,false,[{resource:'bank',count:5,inc:10}],[],[{resource:'bank',count:0.03,inc:0}],[{cat:'asset',name:'platform',type:'structures',count:2},{cat:'asset',name:'r-animal',type:'mecheng',count:1}]);
+	asset.add('wagon-1','Open Wagon',"A basic wagon for moving freight.",0,'rollingstock',false,true,false,[{resource:'bank',count:3,inc:10}],[],[{resource:'bank',count:0.01,inc:0},{resource:'goods',count:0.00001,inc:0}],[{cat:'resource',name:'track',count:5}]);
+	asset.add('wagon-2','Van','A covered wagon that carries more freight.',0,'rollingstock',false,true,false,[{resource:'bank',count:5,inc:10}],[],[{resource:'bank',count:0.02,inc:0},{resource:'goods',count:0.00002,inc:0}],[{cat:'asset',name:'r-vans',type:'mecheng',count:1}]);
+	asset.add('wagon-3','Sheep Wagon','A covered wagon that carries sheep.',0,'rollingstock',false,true,false,[{resource:'bank',count:5,inc:10}],[],[{resource:'bank',count:0.03,inc:0},{resource:'goods',count:0.00003,inc:0}],[{cat:'asset',name:'platform',type:'structures',count:2},{cat:'asset',name:'r-animal',type:'mecheng',count:1}]);
 
 	asset.addType('locos','Locomotives','railway');
 	asset.add('loco-1','Saddle Tank',"A small steam loco for pulling wagons",0,'locos',false,true,false,[{resource:'bank',count:20,inc:5}],[{resource:'bank',count:0.03,inc:0}],[{resource:'bank',count:0,inc:15}],[{cat:'asset',name:'r-iron',type:'trackwork',count:1}])
@@ -46,6 +50,9 @@ function onLoad() {
 	asset.addType('research','Research','research');
 	asset.add('r-civileng','Civil Engineering',"Unlocks buildings and track upgrades.",0,'research',true,true,false,[{resource:'bank',count:10,inc:0}],[],[],[{cat:'resource',name:'track',count:10},{cat:'asset',name:'wagon-1',type:'rollingstock',count:3}]);
 	asset.add('r-mecheng','Mechanical Engineering',"Unlocks Locomotive and rollingstock upgrades.",0,'research',true,true,false,[{resource:'bank',count:40,inc:0}],[],[],[{cat:'resource',name:'track',count:20},{cat:'asset',name:'wagon-1',type:'rollingstock',count:10},{cat:'asset',name:'loco-1',type:'locos',count:2}]);
+	asset.add('safeworking','Safeworking',"Find ways to safely run more trains.",0,'research',true,true,false,[{resource:'bank',count:40,inc:0}],[],[],[{cat:'asset',name:'wagon-1',type:'rollingstock',count:10},{cat:'asset',name:'loco-1',type:'locos',count:2}]);
+	asset.add('signal','Signalling',"STAHP!!!.",0,'research',true,true,false,[{resource:'bank',count:50,inc:0}],[],[],[{cat:'asset',name:'safeworking',type:'research',count:1}]);
+	asset.add('token','Tokens',"Token working helps prevent collisions.",0,'research',true,true,false,[{resource:'bank',count:60,inc:0}],[],[],[{cat:'asset',name:'signal',type:'research',count:1}]);
 
 	asset.addType('trackwork','Trackwork','research');
 	asset.add('r-iron','Iron Rails',"Strong rails that can support a locomotive.",0,'trackwork',true,true,false,[{resource:'bank',count:20,inc:0}],[],[],[{cat:'resource',name:'track',count:20},{cat:'asset',name:'wagon-1',type:'rollingstock',count:10},{cat:'asset',name:'r-civileng',type:'research',count:1}]);
@@ -60,6 +67,165 @@ function onLoad() {
 	asset.addType('mecheng','Mechanical Engineering','research');
 	asset.add('r-vans','Vans','Covered wagons that carry more freight.',0,'mecheng',true,true,false,[{resource:'bank',count:30,inc:0}],[],[],[{cat:'resource',name:'track',count:20},{cat:'asset',name:'wagon-1',type:'rollingstock',count:20},{cat:'asset',name:'r-mecheng',type:'research',count:1}]);
 	asset.add('r-animal','Animal Vans','Covered wagons that carry animals.',0,'mecheng',true,true,false,[{resource:'bank',count:30,inc:0}],[],[],[{cat:'resource',name:'track',count:60},{cat:'asset',name:'wagon-2',type:'rollingstock',count:5},{cat:'asset',name:'r-mecheng',type:'research',count:1},{cat:'asset',name:'r-ballast',type:'trackwork',count:1}]);
+
+// EVENTS
+
+	events.add('investor','Investor',
+		function(r) {
+			if ((r%100) != 0)
+				return false;
+			if (events.getBoostCount('investor') > 0)
+				return false
+			var t = resource.getItem('bank');
+			if (t == null || t.base <0.1)
+				return false;
+
+			return true;
+		},
+		function() {
+			var t = resource.getItem('bank');
+
+			var base = Math.ceil(t.count*0.1);
+			var boost = base*10.0;
+			if (boost > 50)
+				boost = 50;
+			if (base < 1)
+				return;
+			if (base > (t.base*11))
+				base = t.base*9;
+			tickLog.addLog('An Investor has given you $'+base.toFixed(2)+' in return for '+boost.toFixed(1)+'% of your income for 10 seconds.');
+			resource.increment('bank',base);
+			events.addBoost('investor',10000,'bank',0,-boost);
+		}
+	);
+	events.add('accident','Accident',
+		function(r) {
+			if ((r%10) != 0)
+				return false;
+			if (events.getBoostCount('accident') > 0)
+				return false;
+			var t = resource.getItem('track');
+			if (t == null)
+				return false;
+			var wc = 0;
+			var w = asset.getItem('wagon-1','rollingstock');
+			if (w == null || w.count < 4)
+				return false;
+			wc += w.count;
+			w = asset.getItem('wagon-2','rollingstock');
+			if (w != null)
+				wc += w.count;
+			w = asset.getItem('wagon-3','rollingstock');
+			if (w != null)
+				wc += w.count;
+
+			if (t.count < wc)
+				return true;
+
+			var tc = t.count*5;
+			var tt = asset.getItem('safeworking','research');
+			if (tt == null || tt.count > 0)
+				tc *= 2;
+			tt = asset.getItem('token','research');
+			if (tt == null || tt.count > 0)
+				tc *= 2;
+			tt = asset.getItem('signal','research');
+			if (tt == null || tt.count > 0)
+				tc *= 2;
+
+			tc -= wc;
+			if (tc < 0)
+				return true;
+
+			if ((r%tc) == 0)
+				return true;
+
+			return false;
+		},
+		function() {
+			var t = resource.getItem('track');
+			if (t == null)
+				return;
+			var wc = 0;
+			var w = asset.getItem('wagon-1','rollingstock');
+			if (w == null || w.count < 4)
+				return;
+			wc += w.count;
+			w = asset.getItem('wagon-2','rollingstock');
+			if (w != null)
+				wc += w.count;
+			w = asset.getItem('wagon-3','rollingstock');
+			if (w != null)
+				wc += w.count;
+
+			var bust = 0;
+			var cost = 0;
+
+			if (t.count < wc)
+				bust += tickLib.randRange(1,(wc-t.count));
+
+			var tc = t.count*5;
+			var tt = asset.getItem('safeworking','research');
+			if (tt == null || tt.count > 0)
+				tc *= 2;
+			tt = asset.getItem('token','research');
+			if (tt == null || tt.count > 0)
+				tc *= 2;
+			tt = asset.getItem('signal','research');
+			if (tt == null || tt.count > 0)
+				tc *= 2;
+
+			tc -= wc;
+
+			cost = tickLib.randRange(1,(tc/wc)*0.2);
+
+			var txt = 'An accident has occurred! Cost: $'+cost;
+			if (bust > 0)
+				txt += ' plus '+bust+' Rollingstock destroyed';
+			txt += '.';
+
+			tickLog.addLog(txt);
+			w = resource.getItem('bank');
+			if (w != null && w.count < cost)
+				cost = w.count;
+			resource.decrement('bank',cost);
+			if (bust < 1)
+				return;
+
+			w = asset.getItem('wagon-3','rollingstock');
+			if (w != null && w.count > 0) {
+				if (w.count < bust) {
+					bust -= w.count;
+					asset.decrement('wagon-3','rollingstock',w.count);
+				}else{
+					asset.decrement('wagon-3','rollingstock',bust);
+					return;
+				}
+			}
+
+			w = asset.getItem('wagon-2','rollingstock');
+			if (w != null && w.count > 0) {
+				if (w.count < bust) {
+					bust -= w.count;
+					asset.decrement('wagon-2','rollingstock',w.count);
+				}else{
+					asset.decrement('wagon-2','rollingstock',bust);
+					return;
+				}
+			}
+
+			w = asset.getItem('wagon-1','rollingstock');
+			if (w != null && w.count > 0) {
+				if (w.count < bust) {
+					bust -= w.count;
+					asset.decrement('wagon-1','rollingstock',w.count);
+				}else{
+					asset.decrement('wagon-1','rollingstock',bust);
+					return;
+				}
+			}
+		}
+	);
 
 	tickControl.start();
 }
