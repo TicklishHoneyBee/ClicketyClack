@@ -39,11 +39,15 @@ function onLoad() {
 	asset.add('wagon-3','Sheep Wagon','A covered wagon that carries sheep.',0,'rollingstock',false,true,false,[{resource:'bank',count:5,inc:10}],[],[{resource:'bank',count:0.03,inc:0},{resource:'goods',count:0.00003,inc:0}],[{cat:'asset',name:'platform',type:'structures',count:2},{cat:'asset',name:'r-animal',type:'mecheng',count:1}]);
 
 	asset.addType('locos','Locomotives','railway');
-	asset.add('loco-1','Saddle Tank',"A small steam loco for pulling wagons",0,'locos',false,true,false,[{resource:'bank',count:20,inc:5}],[{resource:'bank',count:0.03,inc:0}],[{resource:'bank',count:0,inc:15}],[{cat:'asset',name:'r-iron',type:'trackwork',count:1}])
+	asset.add('loco-1','Saddle Tank',"A small steam loco for pulling wagons",0,'locos',false,true,false,[{resource:'bank',count:20,inc:5}],[{resource:'bank',count:0.03,inc:0}],[{resource:'bank',count:0,inc:15}],[{cat:'asset',name:'r-iron',type:'trackwork',count:1}]);
+	asset.add('loco-2','Small Tender Engine',"A larger steam loco for pulling wagons.",0,'locos',false,true,false,[{resource:'bank',count:30,inc:5}],[{resource:'bank',count:0.02,inc:0}],[{resource:'bank',count:0,inc:20}],[{cat:'asset',name:'r-tender',type:'mecheng',count:1}]);
 
 	asset.addType('structures','Structures','railway');
 	asset.add('platform','Platform',"Makes loading and unloading of rollingstock quicker and easier.",0,'structures',false,true,false,[{resource:'bank',count:5,inc:10}],[],[{resource:'bank',count:0,inc:2}],[{cat:'asset',name:'r-civileng',type:'research',count:1}]);
+	asset.add('hut',"Platelayers' Hut","Platelayers repair and lay new track.",0,'structures',false,true,false,[{resource:'bank',count:10,inc:10}],[],[{resource:'track',count:0.001,inc:0}],[{cat:'asset',name:'platform',type:'structures',count:10}]);
 	asset.add('bridge','Bridge',"Cross over rivers and valleys to get there faster.",0,'structures',false,true,false,[{resource:'bank',count:10,inc:10}],[{resource:'bank',count:0.01,inc:0}],[{resource:'bank',count:0,inc:7}],[{cat:'asset',name:'r-bridge',type:'civileng',count:1}]);
+	asset.add('groundframe',"Ground Frame","A simple lever frame for controlling track and signals.",0,'structures',false,true,false,[{resource:'bank',count:10,inc:10}],[],[{resource:'bank',count:0,inc:10}],[{cat:'asset',name:'signal',type:'research',count:1}]);
+	asset.add('signalbox',"Signal Box","Better than a Ground Frame, includes Token and Block Instruments.",0,'structures',false,true,false,[{resource:'bank',count:10,inc:20}],[],[{resource:'bank',count:0,inc:10}],[{cat:'asset',name:'token',type:'research',count:1},{cat:'asset',name:'groundframe',type:'structures',count:10}]);
 
 // RESEARCH
 
@@ -67,6 +71,7 @@ function onLoad() {
 	asset.addType('mecheng','Mechanical Engineering','research');
 	asset.add('r-vans','Vans','Covered wagons that carry more freight.',0,'mecheng',true,true,false,[{resource:'bank',count:30,inc:0}],[],[],[{cat:'resource',name:'track',count:20},{cat:'asset',name:'wagon-1',type:'rollingstock',count:20},{cat:'asset',name:'r-mecheng',type:'research',count:1}]);
 	asset.add('r-animal','Animal Vans','Covered wagons that carry animals.',0,'mecheng',true,true,false,[{resource:'bank',count:30,inc:0}],[],[],[{cat:'resource',name:'track',count:60},{cat:'asset',name:'wagon-2',type:'rollingstock',count:5},{cat:'asset',name:'r-mecheng',type:'research',count:1},{cat:'asset',name:'r-ballast',type:'trackwork',count:1}]);
+	asset.add('r-tender','Tender Locos',"Loco's with more coal and water storage don't have to stop as often.",0,'mecheng',true,true,false,[{resource:'bank',count:50,inc:0}],[],[],[{cat:'asset',name:'r-animal',type:'mecheng',count:1}]);
 
 // EVENTS
 
@@ -119,10 +124,7 @@ function onLoad() {
 			if (w != null)
 				wc += w.count;
 
-			if (t.count < wc)
-				return true;
-
-			var tc = t.count*5;
+			var tc = t.count;
 			var tt = asset.getItem('safeworking','research');
 			if (tt == null || tt.count > 0)
 				tc *= 2;
@@ -132,6 +134,11 @@ function onLoad() {
 			tt = asset.getItem('signal','research');
 			if (tt == null || tt.count > 0)
 				tc *= 2;
+
+			if (tc < wc)
+				return true;
+
+			tc *= 5;
 
 			tc -= wc;
 			if (tc < 0)
@@ -161,10 +168,7 @@ function onLoad() {
 			var bust = 0;
 			var cost = 0;
 
-			if (t.count < wc)
-				bust += tickLib.randRange(1,(wc-t.count));
-
-			var tc = t.count*5;
+			var tc = t.count;
 			var tt = asset.getItem('safeworking','research');
 			if (tt == null || tt.count > 0)
 				tc *= 2;
@@ -174,6 +178,11 @@ function onLoad() {
 			tt = asset.getItem('signal','research');
 			if (tt == null || tt.count > 0)
 				tc *= 2;
+
+			if (tc < wc)
+				bust += tickLib.randRange(1,(wc-tc));
+
+			tc *= 5;
 
 			tc -= wc;
 
