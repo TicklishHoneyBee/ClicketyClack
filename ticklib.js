@@ -173,7 +173,7 @@ var resource = {
 
 			s = document.createElement('span');
 			s.className = 'resourcecount';
-			var t = resource.items[i].prefix+''+resource.items[i].count.toFixed(2);
+			var t = resource.items[i].prefix+''+tickLib.numDisplay(resource.items[i].count);
 			if (resource.items[i].max > 0)
 				t += '/'+parseInt(resource.items[i].max);
 
@@ -183,7 +183,7 @@ var resource = {
 			if (resource.items[i].inc != 0) {
 				s = document.createElement('span');
 				s.className = 'resourceadd';
-				s.appendChild(document.createTextNode((resource.items[i].inc*tickControl.rate.step).toFixed(2)+'/s'));
+				s.appendChild(document.createTextNode(tickLib.numDisplay(resource.items[i].inc*tickControl.rate.step)+'/s'));
 				n.appendChild(s);
 			}
 
@@ -419,9 +419,9 @@ var asset = {
 								var cc = asset.calcCost(asset.items[i].cost[l],asset.items[i]);
 
 								if (resource.test(r.name,cc)) {
-									rt += cc.toFixed(2);
+									rt += tickLib.numDisplay(cc);
 								}else{
-									rt += '<span class="red">'+cc.toFixed(2)+'</span>';
+									rt += '<span class="red">'+tickLib.numDisplay(cc)+'</span>';
 								}
 
 								ct += rt;
@@ -438,10 +438,10 @@ var asset = {
 								rt += "\n ";
 								rt += r.title+': ';
 								if (asset.items[i].secgive[l].count > 0.0) {
-									rt += asset.items[i].secgive[l].count.toFixed(2)+'/s ';
+									rt += tickLib.numDisplay(asset.items[i].secgive[l].count)+'/s ';
 								}
 								if (asset.items[i].secgive[l].inc > 0.0) {
-									rt += asset.items[i].secgive[l].inc.toFixed(2)+'% Boost';
+									rt += tickLib.numDisplay(asset.items[i].secgive[l].inc)+'% Boost';
 								}
 
 								ct += rt;
@@ -459,7 +459,7 @@ var asset = {
 								rt += "\n ";
 								rt += r.title+': ';
 								if (asset.items[i].sectake[l].count > 0.0) {
-									rt += asset.items[i].sectake[l].count.toFixed(2)+'/s ';
+									rt += tickLib.numDisplay(asset.items[i].sectake[l].count)+'/s ';
 								}
 
 								ct += rt;
@@ -835,5 +835,22 @@ var tickLib = {
 		if (min >= max)
 			return min;
 		return min+Math.floor(Math.random()*Math.floor(max-min));
+	},
+	numDisplay:function(val) {
+		if (val > 1000000000000 || val < -1000000000000) {
+			val /= 1000000000000;
+			return val.toFixed(2)+'T';
+		}else if (val > 1000000000 || val < -1000000000) {
+			val /= 1000000000;
+			return val.toFixed(2)+'B';
+		}else if (val > 1000000 || val < -1000000) {
+			val /= 1000000;
+			return val.toFixed(2)+'M';
+		}else if (val > 5000 || val < -5000) {
+			val /= 1000;
+			return val.toFixed(2)+'K';
+		}
+
+		return val.toFixed(2)+'';
 	}
 };
